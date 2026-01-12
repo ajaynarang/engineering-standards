@@ -1,0 +1,8 @@
+{
+  // Meridian standards repo — prose-friendly lint profile.
+  "config": {
+    "MD013": false, // line length — prose wraps naturally
+    "MD033": false, // inline HTML — occasionally useful in tables
+    "MD041": false // first-line heading — ADR frontmatter styles vary
+  }
+}
