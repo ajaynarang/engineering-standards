@@ -102,3 +102,46 @@ twice. Keys are UUIDs, scoped per member, retained for at least 24 hours.
 Member-facing notifications (email, push, in-app alerts) MUST be sent via
 `notifications-service`. Services and batch jobs never send member communication directly —
 one service owns templates, delivery, and the send log, so communication stays auditable.
+
+## 5. Security baseline
+
+### 5.1 Authentication and authorization
+
+Every endpoint authenticates the caller and authorizes the action against the member or
+staff role it claims. Member endpoints scope every read and write to the authenticated
+member; staff endpoints record which staff member acted.
+
+### 5.2 Secrets
+
+Secrets live in the platform secret store, never in code, config files, or CI logs.
+A leaked secret is rotated the day it is found.
+
+### 5.3 PII in statements and notifications
+
+Statements and notifications MUST address the member by masked account reference, never full
+account number; joint products MUST address every account holder. A communication about a
+shared account that only one holder receives is an incident, not a preference.
+
+### 5.4 Money-movement limits and dual approval
+
+Member-initiated external transfers are subject to a per-member daily limit. Raising or
+overriding a limit is a staff action and MUST require a second staff approval before it
+takes effect. Limit changes are logged with both approvers' identities.
+
+## 6. Change management
+
+### 6.1 Branches and pull requests
+
+Work happens on short-lived branches merged through pull requests. Direct pushes to the
+default branch are disabled everywhere. PR titles say what changed; bodies say why.
+
+### 6.2 CODEOWNERS review
+
+Each repository's CODEOWNERS routes review to the owning squad. A PR that changes owned
+paths without an owning-squad approval MUST NOT merge.
+
+### 6.3 ADRs for cross-service changes
+
+A change that alters behavior across two or more services MUST be preceded by an ADR in
+`engineering-standards/adr/`. The ADR names the services affected, the decision, and the
+rollout order — so cross-service work is planned once, not discovered in review.
