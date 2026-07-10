@@ -103,6 +103,13 @@ Member-facing notifications (email, push, in-app alerts) MUST be sent via
 `notifications-service`. Services and batch jobs never send member communication directly —
 one service owns templates, delivery, and the send log, so communication stays auditable.
 
+### 4.6 Standard error envelope
+
+Every non-2xx response MUST use the standard envelope:
+`{ "error": { "code", "message", "traceId", "details"[] } }`. Service-specific error shapes
+are deprecated; adoption is tracked per service. The envelope's schema lives in
+`api-contracts` shared schemas, and its reference implementation lives in `banking-commons`.
+
 ## 5. Security baseline
 
 ### 5.1 Authentication and authorization
